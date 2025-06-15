@@ -8,6 +8,204 @@
 </head>
 <body>
   <h1>See on ametimängu placeholder</h1>
-  <p>Siia tuleb tegelik mängukood, mille oled loonud (50 nuppu ja soovitused).</p>
+  <p><!DOCTYPE html>
+<html lang="et">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ametisoovitusmäng</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f9f8;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    .info {
+      text-align: center;
+      max-width: 600px;
+      margin: auto;
+      font-size: 1rem;
+    }
+    .categories {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .category {
+      background: #fff;
+      margin: 10px;
+      padding: 12px 16px;
+      border: 2px solid #ccc;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      transition: all 0.2s ease;
+    }
+    .category.selected {
+      background-color: #d1f5e1;
+      border-color: #2ecc71;
+    }
+    .button {
+      display: block;
+      margin: 30px auto 10px;
+      padding: 12px 24px;
+      background-color: #2ecc71;
+      color: #fff;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .button:hover {
+      background-color: #27ae60;
+    }
+    .result {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 1.1rem;
+      background: #ecf9f1;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .selected-list {
+      text-align: center;
+      font-size: 0.95rem;
+      margin-top: 15px;
+      color: #34495e;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ametisoovitusmäng</h1>
+  <p class="info">
+    Vali allolevatest huvidest ja oskustest kuni 5 kategooriat. Seejärel vajuta nuppu ja saad teada, millised ametid võiksid sulle sobida!
+  </p>
+
+  <div class="categories"></div>
+  <div class="selected-list" id="selectedList"></div>
+
+  <button onclick="showRecommendation()" class="button">Kuvada ameti soovitus</button>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    const categories = [
+      { name: "Programmeerimine", professions: ["Tarkvaraarendaja", "Veebiarendaja", "Mobiiliarendaja", "Andmeteadlane", "Testija"] },
+      { name: "Kunst ja disain", professions: ["Graafiline disainer", "Illustraator", "Moe­isainer", "Kunstnik", "Animatsioonikunstnik"] },
+      { name: "Kirjutamine", professions: ["Ajakirjanik", "Copywriter", "Tehniline kirjanik", "Toimetaja", "Stsenarist"] },
+      { name: "Matemaatika", professions: ["Andmeanalüütik", "Aktuaar", "Teadur", "Finantsanalüütik", "Insener"] },
+      { name: "Psühholoogia", professions: ["Psühholoog", "Karjäärinõustaja", "Personalijuht", "Kliiniline psühholoog", "Uuringute spetsialist"] },
+  { name: "Sport ja liikumine", professions: ["Personaaltreener", "Füsioterapeut", "Sporditreener", "Tantsija", "Tervisenõustaja"] },
+  { name: "Muusika", professions: ["Helilooja", "Muusik", "Helirežissöör", "Muusikaõpetaja", "DJ"] },
+  { name: "Haridus", professions: ["Õpetaja", "Õppekoordinaator", "Lasteaiaõpetaja", "Eripedagoog", "Õpikute autor"] },
+  { name: "Loodusteadused", professions: ["Bioloog", "Keskkonnaspetsialist", "Geoloog", "Laboritehnik", "Teadlane"] },
+  { name: "Ettevõtlus", professions: ["Ettevõtja", "Äriarendaja", "Turundusjuht", "Tootejuht", "Start-up nõustaja"] },
+  { name: "Fotograafia", professions: ["Fotograaf", "Fotoajakirjanik", "Stuudioassistent", "Pulmafotograaf", "Tootefotograaf"] },
+  { name: "Käsitöö ja meisterdamine", professions: ["Puidutöötleja", "Keraamik", "Käsitöölane", "Nahakunstnik", "Resturaator"] },
+  { name: "Keeled ja tõlkimine", professions: ["Tõlkija", "Keeletoimetaja", "Keeleõpetaja", "Sünkroontõlk", "Terminoloog"] },
+  { name: "Tehnoloogia", professions: ["IT-tugi", "Süsteemihaldur", "Küberturbe spetsialist", "Pilveteenuste insener", "IT-konsultant"] },
+  { name: "Müük ja turundus", professions: ["Müügijuht", "Turundusspetsialist", "Brändijuht", "Digiturundaja", "Kliendihaldur"] },
+  { name: "Õigus", professions: ["Jurist", "Advokaat", "Kohtutäitur", "Õigusteadlane", "Notar"] },
+  { name: "Metsandus ja loodushoid", professions: ["Metsnik", "Looduskaitsja", "Jahindusspetsialist", "Keskkonnateadlane", "Ranger"] },
+  { name: "Toiduvalmistamine", professions: ["Kokk", "Kondiitritööline", "Toidutehnoloog", "Restorani peakokk", "Menüü planeerija"] },
+  { name: "Ehitus", professions: ["Ehitusinsener", "Arhitekt", "Sisetööde spetsialist", "Ehitusjuht", "Elektrik"] },
+  { name: "Reisimine ja turism", professions: ["Reisijuht", "Giid", "Turismikorraldaja", "Lennuassistend", "Hotellijuhataja"] },
+  { name: "Loomadega töötamine", professions: ["Veterinaar", "Loomaarsti abiline", "Loomaaia töötaja", "Lemmikloomapoe töötaja", "Hobukasvataja"] },
+  { name: "Ajalugu", professions: ["Ajaloolane", "Arheoloog", "Muuseumitöötaja", "Õppejõud", "Arhiivitöötaja"] },
+  { name: "Film ja meedia", professions: ["Stsenarist", "Filmitootja", "Videoeditor", "Kaameramees", "Režissöör"] },
+  { name: "Sotsiaaltöö", professions: ["Sotsiaaltöötaja", "Noorsootöötaja", "Hooldustöötaja", "Kriisinõustaja", "Perelepitaja"] },
+  { name: "Mänguarendus", professions: ["Mänguarendaja", "3D-modelleerija", "Mängudisainer", "Helidisainer", "Stsenaariumi looja"] },
+  { name: "Avalik esinemine", professions: ["Esineja", "Motivatsioonikõneleja", "Teleajakirjanik", "Koolitaja", "Moderaator"] },
+  { name: "Fototöötlus", professions: ["Fotoeditor", "Retušöör", "Kujundaja", "Reklaamfotograaf", "Visuaalkunstnik"] },
+  { name: "Moe ja iluvaldkond", professions: ["Stilist", "Meigikunstnik", "Juuksur", "Kosmeetik", "Moekonsultant"] },
+  { name: "Kaubandus", professions: ["Klienditeenindaja", "Laotöötaja", "Kassapidaja", "Osakonnajuht", "Jaeketi haldur"] },
+  { name: "Autotehnika", professions: ["Automehaanik", "Autodiagnostik", "Autotehnik", "Tehnoülevaataja", "Autoparanduse konsultant"] },
+  { name: "Logistika", professions: ["Logistik", "Laokoordinaator", "Transpordijuht", "Tarneahela analüütik", "Ekspedeerija"] },
+  { name: "Kinnisvara", professions: ["Kinnisvaramaakler", "Haldusjuht", "Kinnisvaraarendaja", "Hindaja", "Üürihaldur"] },
+  { name: "Inseneeria", professions: ["Mehaanikainsener", "Tööstusinsener", "Elektriinsener", "Ehitusinsener", "Automaatikainsener"] },
+  { name: "Tervishoid", professions: ["Õde", "Arst", "Füsioterapeut", "Radioloog", "Laborant"] },
+  { name: "Kosmos ja astronoomia", professions: ["Astronoom", "Kosmosetehnika insener", "Satelliidispetsialist", "Uurimistöö spetsialist", "Astrobioloog"] },
+  { name: "Taimed ja aiandus", professions: ["Aednik", "Taimeteadlane", "Maastikukujundaja", "Florist", "Põllumajandusekspert"] },
+  { name: "Keeleteadus", professions: ["Keeleteadlane", "Dialektoloog", "Foneetik", "Sõnaraamatu koostaja", "Lingvist"] },
+  { name: "Projektijuhtimine", professions: ["Projektijuht", "Scrum Master", "Tootejuht", "Ärianalüütik", "Kvaliteedijuht"] },
+  { name: "Humanitaarabi", professions: ["Abitöötaja", "Logistik humanitaarkriisides", "Kriisinõustaja", "Arengukoostöö spetsialist", "Meditsiinivabatahtlik"] },
+  { name: "Sotsiaalmeedia", professions: ["Sotsiaalmeedia haldur", "Sisutootja", "Mõjuisik", "Kogukonnajuht", "Reklaamianalüütik"] },
+  { name: "Raamatupidamine", professions: ["Raamatupidaja", "Finantsjuht", "Palgaarvestaja", "Maksuspetsialist", "Finantsanalüütik"] },
+  { name: "Arvutigraafika", professions: ["3D-modelleerija", "Graafiline disainer", "Visuaalefektide kunstnik", "UI/UX disainer", "Animatsioonikunstnik"] },
+  { name: "Arvutimängud", professions: ["Streamer", "Mängutester", "E-sportlane", "Mängukommentaator", "Mänguarendaja"] },
+  { name: "Tarkvaratestimine", professions: ["Testija", "Kvaliteediinsener", "Automatiseeritud testija", "Testimiskonsultant", "QA-analüütik"] },
+  { name: "Andmeteadus", professions: ["Andmeteadlane", "Andmeanalüütik", "Masinõppeinsener", "Tehisintellekti spetsialist", "Statistik"] },
+  { name: "Küberkaitse", professions: ["Küberturbe analüütik", "Turbeinsener", "Etiline häkker", "SOC analüütik", "Infoturbe spetsialist"] },
+  { name: "UX/UI disain", professions: ["UX disainer", "UI disainer", "Kasutajakogemuse analüütik", "Interaktsioonidisainer", "Disainiuurija"] },
+  { name: "Avalik haldus", professions: ["Riigiametnik", "Poliitikanõunik", "Projektijuht avalikus sektoris", "Analüütik", "Kohaliku omavalitsuse juht"] }
+    ];
+
+    const selectedCategories = [];
+
+    function toggleCategory(categoryName) {
+      const index = selectedCategories.indexOf(categoryName);
+      if (index === -1) {
+        if (selectedCategories.length >= 5) {
+          alert('Sa saad valida kuni 5 kategooriat.');
+          return;
+        }
+        selectedCategories.push(categoryName);
+      } else {
+        selectedCategories.splice(index, 1);
+      }
+      renderCategories();
+      updateSelectedList();
+    }
+
+    function renderCategories() {
+      const container = document.querySelector('.categories');
+      container.innerHTML = '';
+      categories.forEach(category => {
+        const div = document.createElement('div');
+        div.className = 'category' + (selectedCategories.includes(category.name) ? ' selected' : '');
+        div.innerText = category.name;
+        div.onclick = () => toggleCategory(category.name);
+        container.appendChild(div);
+      });
+    }
+
+    function updateSelectedList() {
+      const el = document.getElementById('selectedList');
+      if (selectedCategories.length > 0) {
+        el.innerText = 'Valitud: ' + selectedCategories.join(', ');
+      } else {
+        el.innerText = '';
+      }
+    }
+
+    function showRecommendation() {
+      const resultDiv = document.getElementById('result');
+      if (selectedCategories.length < 2) {
+        resultDiv.innerHTML = '<strong>Palun vali vähemalt kaks kategooriat!</strong>';
+        return;
+      }
+      const output = selectedCategories.map(name => {
+        const cat = categories.find(c => c.name === name);
+        const suggestions = cat.professions.map(job => `• ${job}`);
+        return `<strong>${name}</strong><br>${suggestions.join('<br>')}`;
+      });
+      resultDiv.innerHTML = '<h3>Sinu soovituslikud ametid:</h3>' + output.join('<br><br>');
+    }
+
+    renderCategories();
+  </script>
+</body>
+</html>
+</p>
 </body>
 </html>
